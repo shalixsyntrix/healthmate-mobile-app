@@ -82,7 +82,7 @@ class _SplashScreenState extends State<SplashScreen>
                     shape: BoxShape.circle,
                     boxShadow: [
                       BoxShadow(
-                        color: Colors.black.withOpacity(0.2),
+                        color: Colors.black.withValues(alpha: 0.2),
                         blurRadius: 20,
                         offset: const Offset(0, 10),
                       ),
@@ -116,7 +116,7 @@ class _SplashScreenState extends State<SplashScreen>
                       'Your Personal Health Tracker',
                       style: TextStyle(
                         fontSize: 16,
-                        color: Colors.white.withOpacity(0.9),
+                        color: Colors.white.withValues(alpha: 0.9),
                         letterSpacing: 0.5,
                       ),
                     ),

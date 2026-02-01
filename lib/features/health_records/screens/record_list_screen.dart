@@ -34,7 +34,7 @@ class _RecordListScreenState extends State<RecordListScreen> {
     super.dispose();
   }
 
-  Future<void> _selectDateFilter(BuildContext context) async {
+  Future<void> _selectDateFilter() async {
     final DateTime? picked = await showDatePicker(
       context: context,
       initialDate: _filterDate ?? DateTime.now(),
@@ -43,6 +43,7 @@ class _RecordListScreenState extends State<RecordListScreen> {
     );
 
     if (picked != null) {
+      if (!mounted) return;
       setState(() {
         _filterDate = picked;
       });
@@ -61,20 +62,16 @@ class _RecordListScreenState extends State<RecordListScreen> {
     Provider.of<HealthRecordProvider>(context, listen: false).clearFilter();
   }
 
-  void _editRecord(HealthRecord record) {
-    Navigator.of(context)
-        .push(
-          MaterialPageRoute(
-            builder: (context) => AddRecordScreen(recordToEdit: record),
-          ),
-        )
-        .then((_) {
-          // Reload records after returning from edit screen
-          Provider.of<HealthRecordProvider>(
-            context,
-            listen: false,
-          ).loadRecords();
-        });
+  Future<void> _editRecord(HealthRecord record) async {
+    await Navigator.of(context).push(
+      MaterialPageRoute(
+        builder: (context) => AddRecordScreen(recordToEdit: record),
+      ),
+    );
+
+    // Reload records after returning from edit screen
+    if (!mounted) return;
+    Provider.of<HealthRecordProvider>(context, listen: false).loadRecords();
   }
 
   Future<void> _deleteRecord(HealthRecord record) async {
@@ -98,6 +95,8 @@ class _RecordListScreenState extends State<RecordListScreen> {
         ],
       ),
     );
+
+    if (!mounted) return;
 
     if (confirmed == true && record.id != null) {
       final success = await Provider.of<HealthRecordProvider>(
@@ -133,7 +132,7 @@ class _RecordListScreenState extends State<RecordListScreen> {
             ),
           IconButton(
             icon: const Icon(Icons.filter_list),
-            onPressed: () => _selectDateFilter(context),
+            onPressed: () => _selectDateFilter(),
             tooltip: 'Filter by date',
           ),
         ],
@@ -241,20 +240,16 @@ class _RecordListScreenState extends State<RecordListScreen> {
         ],
       ),
       floatingActionButton: FloatingActionButton(
-        onPressed: () {
-          Navigator.of(context)
-              .push(
-                MaterialPageRoute(
-                  builder: (context) => const AddRecordScreen(),
-                ),
-              )
-              .then((_) {
-                // Reload records after returning from add screen
-                Provider.of<HealthRecordProvider>(
-                  context,
-                  listen: false,
-                ).loadRecords();
-              });
+        onPressed: () async {
+          await Navigator.of(context).push(
+            MaterialPageRoute(builder: (context) => const AddRecordScreen()),
+          );
+
+          if (!context.mounted) return;
+          Provider.of<HealthRecordProvider>(
+            context,
+            listen: false,
+          ).loadRecords();
         },
         backgroundColor: AppColors.primary,
         child: const Icon(Icons.add),

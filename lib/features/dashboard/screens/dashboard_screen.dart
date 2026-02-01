@@ -221,7 +221,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 16),
                     child: Card(
-                      color: AppColors.primaryLight.withOpacity(0.1),
+                      color: AppColors.primaryLight.withValues(alpha: 0.1),
                       child: Padding(
                         padding: const EdgeInsets.all(16),
                         child: Row(
@@ -275,7 +275,7 @@ class _DashboardScreenState extends State<DashboardScreen> {
               Container(
                 padding: const EdgeInsets.all(10),
                 decoration: BoxDecoration(
-                  color: color.withOpacity(0.1),
+                  color: color.withValues(alpha: 0.1),
                   borderRadius: BorderRadius.circular(10),
                 ),
                 child: Icon(icon, color: color, size: 28),
